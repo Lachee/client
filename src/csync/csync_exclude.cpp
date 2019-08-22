@@ -356,7 +356,7 @@ bool ExcludedFiles::versionDirectiveKeepNextLine(const QByteArray &directive) co
 bool ExcludedFiles::isExcluded(
     const QString &filePath,
     const QString &basePath,
-    bool excludeHidden) const
+    bool excludeHidden)
 {
     if (!filePath.startsWith(basePath, Utility::fsCasePreserving() ? Qt::CaseInsensitive : Qt::CaseSensitive)) {
         // Mark paths we're not responsible for as excluded...
@@ -390,7 +390,8 @@ bool ExcludedFiles::isExcluded(
     }
 
     //Check if we have a local exclude.
-    auto ignorePath = basePath.append("/.ocignore");
+    QString ignorePath(basePath);
+	ignorePath.append("/.ocignore");
     bool hasIgnore = addManualExcludeFile(ignorePath);
     
     //Check if we match the patterns.

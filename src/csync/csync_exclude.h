@@ -95,7 +95,7 @@ public:
     bool isExcluded(
         const QString &filePath,
         const QString &basePath,
-        bool excludeHidden) const;
+        bool excludeHidden);
 
     /**
      * Adds an exclude pattern.
