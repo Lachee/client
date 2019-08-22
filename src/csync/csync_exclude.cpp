@@ -277,8 +277,11 @@ void ExcludedFiles::setClientVersion(ExcludedFiles::Version version)
     _clientVersion = version;
 }
 
-bool ExcludedFiles::addManualExcludeFile(QFile file)
+bool ExcludedFiles::addManualExcludeFile(const QString &path)
 {
+    QFile f(path);
+	if (!f.exists()) return false;
+	
     //Lachee Edit: Reads a local file and add's the rules to the manual excludes.
     if (!f.open(QIODevice::ReadOnly))
         return false;
@@ -387,15 +390,14 @@ bool ExcludedFiles::isExcluded(
     }
 
     //Check if we have a local exclude.
-    QString ignorePath = basePath.append("/.ocignore");
-    QFile ignoreFile = QFile(ignorePath);
-    bool hasIgnore = ignoreFile.exists() && addManualExcludeFile(ignoreFile);
+    auto ignorePath = basePath.append("/.ocignore");
+    bool hasIgnore = addManualExcludeFile(ignorePath);
     
     //Check if we match the patterns.
     bool success = fullPatternMatch(relativePath, type) != CSYNC_NOT_EXCLUDED;
         
     //Clear our manual excludes that we added for the local ignore.
-    if (hasignore) 
+    if (hasIgnore) 
         clearManualExcludes();
     
     //Return our success

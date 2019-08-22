@@ -111,7 +111,7 @@ public:
      * Primarily used for local .ocignore files. isExcluded will call this when there is a 
      * .ocignore file located in the base parent. It will then clear all manual excludes afterwards.
      */
-    bool addManualExcludeFile(QFile file);
+    bool addManualExcludeFile(const QString &filePath);
 
     /**
      * Removes all manually added exclude patterns.
