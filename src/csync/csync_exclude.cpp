@@ -277,6 +277,26 @@ void ExcludedFiles::setClientVersion(ExcludedFiles::Version version)
     _clientVersion = version;
 }
 
+bool ExcludedFiles::addManualExcludeFile(QFile file)
+{
+    //Lachee Edit: Reads a local file and add's the rules to the manual excludes.
+    if (!f.open(QIODevice::ReadOnly))
+        return false;
+    
+    while (!f.atEnd()) 
+    {
+        QByteArray line = f.readLine().trimmed();
+        
+        if (line.isEmpty() || line.startsWith('#'))
+            continue;
+        
+        csync_exclude_expand_escapes(line);
+        _manualExcludes.append(QString::fromUtf8(line));
+    }
+    
+    return true;
+}
+
 bool ExcludedFiles::reloadExcludeFiles()
 {
     _allExcludes.clear();
