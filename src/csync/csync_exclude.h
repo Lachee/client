@@ -106,6 +106,14 @@ public:
     void addManualExclude(const QString &expr);
 
     /**
+     * Reads a file containing exclude patterns and adds them to the manual exclusion list.
+     * 
+     * Primarily used for local .ocignore files. isExcluded will call this when there is a 
+     * .ocignore file located in the base parent. It will then clear all manual excludes afterwards.
+     */
+    bool addManualExcludeFile(QFile file);
+
+    /**
      * Removes all manually added exclude patterns.
      *
      * Primarily used in tests.
