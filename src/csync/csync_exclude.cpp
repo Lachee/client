@@ -386,7 +386,20 @@ bool ExcludedFiles::isExcluded(
         relativePath.chop(1);
     }
 
-    return fullPatternMatch(relativePath, type) != CSYNC_NOT_EXCLUDED;
+    //Check if we have a local exclude.
+    QString ignorePath = basePath.append("/.ocignore");
+    QFile ignoreFile = QFile(ignorePath);
+    bool hasIgnore = ignoreFile.exists() && addManualExcludeFile(ignoreFile);
+    
+    //Check if we match the patterns.
+    bool success = fullPatternMatch(relativePath, type) != CSYNC_NOT_EXCLUDED;
+        
+    //Clear our manual excludes that we added for the local ignore.
+    if (hasignore) 
+        clearManualExcludes();
+    
+    //Return our success
+    return success;
 }
 
 CSYNC_EXCLUDE_TYPE ExcludedFiles::traversalPatternMatch(const QString &path, ItemType filetype) const
